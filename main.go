@@ -72,7 +72,6 @@ func getUp(netName string) (int, error) {
 		log.Fatal(err)
 	}
 	b = b[:len(b)-1]
-	//how to close file
 	return strconv.Atoi(string(b))
 }
 func getDown(netName string) (int, error) {
@@ -124,6 +123,7 @@ func withUnit(b int) (res string) {
 	case 4:
 		unit = "T"
 	default:
+		log.Fatal("can't handle so much data")
 
 	}
 
