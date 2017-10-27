@@ -45,9 +45,9 @@ func main() {
 	for {
 		<-ticker.C
 		//clean screen
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
+// 		cmd := exec.Command("clear")
+// 		cmd.Stdout = os.Stdout
+// 		cmd.Run()
 
 		for i, netName := range netNames {
 			detectNetSpeed(i, netName)
@@ -96,7 +96,8 @@ func detectNetSpeed(i int, netName string) {
 	up := withUnit(ups[i][1] - ups[i][0])
 	down := withUnit(downs[i][1] - downs[i][0])
 
-	fmt.Println(netName + "upload: " + up + "B/s" + "  download: " + down + "B/s")
+	fmt.Printf("%8s\tupload:%5sB/s\tdownload:%5sB/s\r",netname,up,down)
+	
 	ups[i][0] = ups[i][1]
 	downs[i][0] = downs[i][1]
 
