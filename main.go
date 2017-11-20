@@ -45,9 +45,9 @@ func main() {
 	for {
 		<-ticker.C
 		//clean screen
-// 		cmd := exec.Command("clear")
-// 		cmd.Stdout = os.Stdout
-// 		cmd.Run()
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
 
 		for i, netName := range netNames {
 			detectNetSpeed(i, netName)
@@ -68,6 +68,7 @@ func getNetNames() (names []string) {
 
 func getUp(netName string) (int, error) {
 	b, err := ioutil.ReadFile(rPath + netName + transmitPath)
+	// b, err := ioutil.ReadFile("/sys/class/net/wlp2s0//statistics/tx_bytes")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -76,6 +77,7 @@ func getUp(netName string) (int, error) {
 }
 func getDown(netName string) (int, error) {
 	b, err := ioutil.ReadFile(rPath + netName + recievePath)
+	// b, err := ioutil.ReadFile("/sys/class/net/wlp2s0//statistics/rx_bytes")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,6 +88,7 @@ func getDown(netName string) (int, error) {
 func detectNetSpeed(i int, netName string) {
 	var err error
 	ups[i][1], err = getUp(netName)
+	fmt.Println(ups[i][1])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,11 +96,15 @@ func detectNetSpeed(i int, netName string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(downs[i][1])
 	up := withUnit(ups[i][1] - ups[i][0])
 	down := withUnit(downs[i][1] - downs[i][0])
 
-	fmt.Printf("%8s\tupload:%5sB/s\tdownload:%5sB/s\r",netname,up,down)
-	
+	// \r is a method to refreash but sometimes it can leave some result unerased.
+	// fmt.Printf("%8s\tupload:%5sB/s\tdownload:%5sB/s\r", netName, up, down)
+
+	fmt.Printf("%8s upload:%8sB/s download:%8sB/s\n", netName, up, down)
+
 	ups[i][0] = ups[i][1]
 	downs[i][0] = downs[i][1]
 
